@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/signal"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"sync"
 	"syscall"
@@ -30,6 +31,8 @@ var statusFast bool
 var statusWatch bool
 var statusInterval int
 var statusVerbose bool
+
+const defaultStatusMailMaxAgents = 40
 
 var statusCmd = &cobra.Command{
 	Use:     "status",
@@ -600,6 +603,26 @@ func outputStatusText(status TownStatus) error {
 	return nil
 }
 
+func statusMailMaxAgents() int {
+	value := strings.TrimSpace(os.Getenv("GT_STATUS_MAIL_MAX_AGENTS"))
+	if value == "" {
+		return defaultStatusMailMaxAgents
+	}
+	maxAgents, err := strconv.Atoi(value)
+	if err != nil {
+		return defaultStatusMailMaxAgents
+	}
+	return maxAgents
+}
+
+func shouldSkipMailForAgents(agentCount int) bool {
+	maxAgents := statusMailMaxAgents()
+	if maxAgents <= 0 {
+		return false
+	}
+	return agentCount > maxAgents
+}
+
 // renderAgentDetails renders full agent bead details
 func renderAgentDetails(agent AgentRuntime, indent string, hooks []AgentHookInfo, townRoot string) { //nolint:unparam // indent kept for future customization
 	// Line 1: Agent bead ID + status
@@ -1091,6 +1114,10 @@ func discoverRigAgents(allSessions map[string]bool, r *rig.Rig, crews []string, 
 
 	if len(defs) == 0 {
 		return nil
+	}
+
+	if !skipMail && shouldSkipMailForAgents(len(defs)) {
+		skipMail = true
 	}
 
 	// Fetch all agents in parallel
