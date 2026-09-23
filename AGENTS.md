@@ -1,9 +1,28 @@
-# Agent Instructions
+# AGENTS.md
 
-See **CLAUDE.md** for complete agent context and instructions.
+## Role
 
-This file exists for compatibility with tools that look for AGENTS.md.
+Orchestration-complexity control/baseline.
 
-> **Recovery**: Run `gt prime` after compaction, clear, or new session
+## Owns
 
-Full context is injected by `gt prime` at session start.
+- Gas Town behavior and benchmarks
+
+## Do not duplicate
+
+- becoming a dependency of the lower-bound stack
+
+## Sibling repos to consult first
+
+- ryanmaclean/bop
+- ryanmaclean/smolfire
+
+## Cross-project context
+
+Read `docs/CROSS-PROJECT-LESSONS-2026-09.md` before making architectural changes.
+
+## Agent delegation
+
+- Primary GitHub coding agent: Copilot when assignable/available.
+- Fallback: delegate the issue or PR to Codex with `@codex`.
+- Do not treat Copilot/Codex state as canonical project state; keep canonical work in repo issues/BOP/filesystem state.
