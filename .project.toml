@@ -1,0 +1,12 @@
+schema = "ryanlab.project.v1"
+name = "gastown"
+status = "reference"
+role = "Orchestration-complexity control and benchmark baseline"
+
+canonical_for = ["orchestration-control-baseline"]
+integrates_with = ["bop", "smolfire"]
+do_not_implement = ["lower-bound-stack-dependency"]
+
+registry = "ryanmaclean/skills:docs/PROJECTS.md"
+glossary = "ryanmaclean/skills:docs/GLOSSARY.md"
+benchmark_schema = "ryanmaclean/skills:schemas/bench.v1.schema.json"
